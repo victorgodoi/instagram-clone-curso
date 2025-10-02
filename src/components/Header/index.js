@@ -3,9 +3,11 @@ import './header.css';
 import RegisterModal from './components/RegisterModal';
 import { auth } from '../../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import PostModal from './components/PostModal';
 
 const Header = ({ user, setUser }) => {
-  const [openModal, setOpenModal] = useState(false);
+  const [openModalRegister, setOpenModalRegister] = useState(false);
+  const [openPostModal, setOpenPostModal] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -35,7 +37,13 @@ const Header = ({ user, setUser }) => {
           {user ?
             <div className='logadoInfo'>
               <span>Olá <strong>{user}</strong></span>
-              <a href='#'>Postar</a>
+              <button
+                type="button"
+                className="link-button"
+                onClick={() => setOpenPostModal(true)}
+              >
+                Postar
+              </button>
             </div>
           :
             <>
@@ -63,7 +71,7 @@ const Header = ({ user, setUser }) => {
                   <button
                     type="button"
                     className="link-button"
-                    onClick={() => setOpenModal(true)}
+                    onClick={() => setOpenModalRegister(true)}
                   >
                     Criar Conta!
                   </button>
@@ -73,7 +81,12 @@ const Header = ({ user, setUser }) => {
           }
         </div>
       </div>
-      <RegisterModal openModal={openModal} setOpenModal={setOpenModal} />
+      <RegisterModal openModal={openModalRegister} setOpenModal={setOpenModalRegister} />
+      <PostModal
+        openModal={openPostModal}
+        setOpenModal={setOpenPostModal}
+        user={user}
+      />
     </header>
   )
 }
