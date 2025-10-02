@@ -8,13 +8,23 @@ header {
     justify-content: space-between;
     width: 100%;
 
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
     .login {
       display: flex;
+      align-items: center;
       gap: 10px;
 
       .register {
-        a {
+        button {
           font-size: 14px;
+          text-decoration: underline;
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
         }
       }
 
