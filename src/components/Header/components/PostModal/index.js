@@ -101,12 +101,21 @@ const PostModal = ({ openModal, setOpenModal, user }) => {
             value={postTitle}
             onChange={(e) => setPostTitle(e.target.value)}
           />
-          <input
-            type="file"
-            name="file"
-            ref={fileInputRef}
-            onChange={(e) => setNewFile(e.target.files[0])}
-          />
+          <div className="fileUploadWrapper">
+            <label htmlFor="fileInput" className="fileUploadBox">
+              {newFile ? "Escolher novo arquivo" : "Escolher arquivo"}
+            </label>
+            <input
+              type="file"
+              id="fileInput"
+              name="file"
+              ref={fileInputRef}
+              onChange={(e) => setNewFile(e.target.files[0])}
+            />
+            <p className="fileUploadText">
+              {newFile ? newFile.name : "Nenhum arquivo escolhido"}
+            </p>
+          </div>
           <progress value={progress} />
           <div className='buttonSumit'>
             <input type='submit' value='Postar' />
