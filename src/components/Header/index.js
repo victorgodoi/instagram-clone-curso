@@ -30,8 +30,12 @@ const Header = ({ user, setUser }) => {
       <div className='container'>
         <div className='contentHeader'>
           <div className='logo'>
-            <a href='#'>
-              <img src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png'/>
+            <a href="/">
+              <img
+                src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png'
+                alt='Logo do instagram'
+                title='Logo do instagram'
+                />
             </a>
           </div>
           {user ?
