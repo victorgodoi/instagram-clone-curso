@@ -1,9 +1,8 @@
-// import './RegisterModal.css';
+import './PostModal.css';
 import { useEffect, useRef, useState } from 'react';
 import Modal from '../../../Modal';
-import { storage, db } from '../../../../firebase';
-import firebase from 'firebase/compat/app';
-import { ref as storageRef, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import { db } from '../../../../firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
 const PostModal = ({ openModal, setOpenModal, user }) => {
   const [postTitle, setPostTitle] = useState('');
@@ -11,14 +10,43 @@ const PostModal = ({ openModal, setOpenModal, user }) => {
   const [progress, setProgress] = useState(0);
   const fileInputRef = useRef(null);
 
-  useEffect(() => {
-    setProgress(0);
-    setPostTitle('');
-    setNewFile(null);
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  }, [openModal])
+  // ADICIONADO: upload para Cloudinary com callback de progresso
+  const uploadToCloudinaryWithProgress = async (file, onProgress) => {
+    const url = `https://api.cloudinary.com/v1_1/dzcrm8gcx/upload`;
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'instagram-clone-curso');
 
-  const newPost = (e) => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', url);
+
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable && typeof onProgress === 'function') {
+          const percent = Math.round((e.loaded / e.total) * 100);
+          onProgress(percent);
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            const res = JSON.parse(xhr.responseText);
+            resolve(res.secure_url || res.url);
+          } catch (err) {
+            reject(err);
+          }
+        } else {
+          reject(new Error(xhr.statusText || `Upload failed (status ${xhr.status})`));
+        }
+      };
+
+      xhr.onerror = () => reject(new Error('Network error during upload'));
+      xhr.send(formData);
+    });
+  }
+
+  const newPost = async (e) => {
     e.preventDefault();
 
     if (!newFile) {
@@ -26,43 +54,38 @@ const PostModal = ({ openModal, setOpenModal, user }) => {
       return;
     }
 
-    const fileName = newFile.name;
-    const fileRef = storageRef(storage, `images/${fileName}`);
-    const uploadTask = uploadBytesResumable(fileRef, newFile);
+    try {
+      setProgress(5);
+      const imageUrl = await uploadToCloudinaryWithProgress(newFile, setProgress);
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const percent = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        setProgress(percent);
-      },
-      (error) => {
-        alert(error.message || 'ocorreu um ao fazer o upload do arquivo');
-      },
-      () => {
-        // quando terminar, pega a URL usando getDownloadURL
-        getDownloadURL(fileRef)
-          .then((url) => {
-            db.collection('posts').add({
-              title: postTitle,
-              image: url,
-              userName: user,
-              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            });
+      // salva no Firestore (modular)
+      await addDoc(collection(db, 'posts'), {
+        title: postTitle,
+        image: imageUrl,
+        userName: user,
+        timestamp: serverTimestamp(),
+      });
 
-            setProgress(0);
-            setPostTitle('');
-            setNewFile(null);
-            if (fileInputRef.current) fileInputRef.current.value = '';
-            setOpenModal(false);
-            alert('Publicado com sucesso!');
-          })
-          .catch((err) => {
-            alert(err.message || 'Erro ao obter URL do arquivo');
-          });
-      }
-    );
+      // limpeza e feedback
+      setProgress(0);
+      setPostTitle('');
+      setNewFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      setOpenModal(false);
+      alert('Publicado com sucesso!');
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Erro no upload');
+      setProgress(0);
+    }
   };
+
+  useEffect(() => {
+    setProgress(0);
+    setPostTitle('');
+    setNewFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  }, [openModal]);
 
   return(
     <Modal
@@ -70,9 +93,8 @@ const PostModal = ({ openModal, setOpenModal, user }) => {
       setOpenModal={setOpenModal}
       title='Nova publicação'
     >
-      <div className='registerModal'>
+      <div className='postModal'>
         <form onSubmit={(e) => newPost(e)}>
-          <progress value={progress} />
           <input
             type="text"
             placeholder="Título da publicação..."
@@ -85,6 +107,7 @@ const PostModal = ({ openModal, setOpenModal, user }) => {
             ref={fileInputRef}
             onChange={(e) => setNewFile(e.target.files[0])}
           />
+          <progress value={progress} />
           <div className='buttonSumit'>
             <input type='submit' value='Postar' />
           </div>
