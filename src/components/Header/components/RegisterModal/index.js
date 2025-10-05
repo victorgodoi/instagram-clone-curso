@@ -3,17 +3,19 @@ import Modal from '../../../Modal';
 import { auth } from '../../../../firebase';
 import { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { useNotification } from '../../../../hooks/useNotification';
 
 const RegisterModal = ({ openModal, setOpenModal }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userName, setUserName] = useState('');
   // const [loading, setLoading] = useState(false);
+  const { notify } = useNotification();
 
   const createAccount = async (e) => {
     e.preventDefault();
     if (!email || !password || !userName) {
-      alert('Preencha todos os campos!');
+      notify({ type: 'error', title: 'Dados incompletos!', description: 'Preencha todos os campos para criar sua conta.', duration: 5000 });
       return;
     }
     // setLoading(true);
@@ -21,14 +23,13 @@ const RegisterModal = ({ openModal, setOpenModal }) => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       await updateProfile(user, { displayName: userName });
-      alert('Conta criada com sucesso!');
+      notify({ type: 'success', title: 'Conta criada!', description: 'Sua conta foi criada com sucesso. Já pode fazer login.', duration: 3000 });
       setEmail('');
       setPassword('');
       setUserName('');
       setOpenModal(false);
     } catch (error) {
-      console.error('Erro ao criar conta:', error);
-      alert(error.message || 'Erro ao criar conta');
+      notify({ type: 'error', title: 'Erro ao criar conta!', description: 'Não foi possível criar a conta. Verifique os dados e tente novamente.', duration: 5000 });
     } finally {
       // setLoading(false);
     }

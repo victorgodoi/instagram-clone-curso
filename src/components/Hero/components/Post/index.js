@@ -2,11 +2,13 @@ import "./post.css";
 import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../../../firebase";
+import { useNotification } from "../../../../hooks/useNotification";
 
 const Post = ({data, id, user}) => {
   const [showComment, setShowComment] = useState(false);
   const [commentText, setCommentText] = useState({});
   const [comments, setComments] = useState([]);
+  const { notify } = useNotification();
 
   const handleComment = async (idComment, e) => {
     e.preventDefault();
@@ -14,7 +16,7 @@ const Post = ({data, id, user}) => {
     const currentComment = (commentText[idComment] || '').trim();
 
     if (!currentComment) {
-      alert('Escreva algo antes de comentar.');
+      notify({ type: 'error', title: 'Comentário vazio!', description: 'Escreva algo antes de enviar seu comentário.', duration: 5000 });
       return;
     }
 
@@ -28,10 +30,9 @@ const Post = ({data, id, user}) => {
 
       // limpa o campo do comentário para esse post
       setCommentText(prev => ({ ...prev, [idComment]: '' }));
-      alert('Comentário feito com sucesso');
+      notify({ type: 'success', title: 'Comentário enviado!', description: 'Seu comentário foi publicado.', duration: 3000 });
     } catch (err) {
-      console.error('Erro ao enviar comentário:', err);
-      alert(err.message || 'Erro ao enviar comentário');
+      notify({ type: 'error', title: 'Erro ao enviar comentário!', description: 'Não foi possível publicar o comentário. Tente novamente.', duration: 5000 });
     }
   };
 

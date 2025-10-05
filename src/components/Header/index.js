@@ -4,12 +4,14 @@ import RegisterModal from './components/RegisterModal';
 import { auth } from '../../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import PostModal from './components/PostModal';
+import { useNotification } from '../../hooks/useNotification'
 
 const Header = ({ user, setUser }) => {
   const [openModalRegister, setOpenModalRegister] = useState(false);
   const [openPostModal, setOpenPostModal] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { notify } = useNotification();
 
   const Logar = (e) => {
     e.preventDefault();
@@ -18,10 +20,15 @@ const Header = ({ user, setUser }) => {
       .then((userCredential) => {
         const user = userCredential.user;
         setUser(user.displayName || user.email);
-        alert('Logado com sucesso!');
+        notify({ type: 'success', title: 'Logado com sucesso!', description: 'Bem-vindo(a)!', duration: 3000 });
       })
       .catch((error) => {
-        alert(error.message || 'Erro ao logar na conta');
+        notify({
+          type: 'error',
+          title: 'Falha no login',
+          description: 'E-mail ou senha incorretos. Verifique e tente novamente.',
+          duration: 5000 
+        });
       });
   };
 
@@ -30,7 +37,7 @@ const Header = ({ user, setUser }) => {
     auth.signOut().then(() => {
       setUser(null);
     })
-    alert('Deslogado com sucesso!');
+    notify({ type: 'success', title: 'Você saiu!', description: 'Sessão encerrada com sucesso.', duration: 3000 });
   }
 
   return(

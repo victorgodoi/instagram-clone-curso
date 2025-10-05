@@ -3,12 +3,14 @@ import { useEffect, useRef, useState } from 'react';
 import Modal from '../../../Modal';
 import { db } from '../../../../firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { useNotification } from '../../../../hooks/useNotification';
 
 const PostModal = ({ openModal, setOpenModal, user }) => {
   const [postTitle, setPostTitle] = useState('');
   const [newFile, setNewFile] = useState(null);
   const [progress, setProgress] = useState(0);
   const fileInputRef = useRef(null);
+  const { notify } = useNotification();
 
   // ADICIONADO: upload para Cloudinary com callback de progresso
   const uploadToCloudinaryWithProgress = async (file, onProgress) => {
@@ -49,8 +51,13 @@ const PostModal = ({ openModal, setOpenModal, user }) => {
   const newPost = async (e) => {
     e.preventDefault();
 
+    if (!postTitle) {
+      notify({ type: 'error', title: 'Título vazio!', description: 'Escreva um título para publicar.', duration: 5000 });
+      return;
+    }
+
     if (!newFile) {
-      alert('Selecione um arquivo antes de postar.');
+      notify({ type: 'error', title: 'Arquivo não selecionado!', description: 'Selecione uma imagem antes de publicar.', duration: 5000 });
       return;
     }
 
@@ -72,10 +79,10 @@ const PostModal = ({ openModal, setOpenModal, user }) => {
       setNewFile(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
       setOpenModal(false);
-      alert('Publicado com sucesso!');
+      notify({ type: 'success', title: 'Publicação enviada!', description: 'Sua foto foi publicada com sucesso.', duration: 3000 });
     } catch (err) {
       console.error(err);
-      alert(err.message || 'Erro no upload');
+      notify({ type: 'error', title: 'Erro no upload!', description: 'Não foi possível enviar a imagem. Tente novamente mais tarde.', duration: 5000 });
       setProgress(0);
     }
   };
