@@ -11,7 +11,7 @@ const Header = ({ user, setUser }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const logar = (e) => {
+  const Logar = (e) => {
     e.preventDefault();
 
     signInWithEmailAndPassword(auth, email, password)
@@ -24,6 +24,14 @@ const Header = ({ user, setUser }) => {
         alert(error.message || 'Erro ao logar na conta');
       });
   };
+
+  const Logout = (e) => {
+    e.preventDefault();
+    auth.signOut().then(() => {
+      setUser(null);
+    })
+    alert('Deslogado com sucesso!');
+  }
 
   return(
     <header>
@@ -48,11 +56,18 @@ const Header = ({ user, setUser }) => {
               >
                 Postar
               </button>
+              <button
+                type="button"
+                className="buttonLogout"
+                onClick={(e) => Logout(e)}
+              >
+                Deslogar
+              </button>
             </div>
           :
             <>
               <div className='login'>
-                <form onSubmit={(e) => logar(e)}>
+                <form onSubmit={(e) => Logar(e)}>
                   <input
                     type='text'
                     placeholder='Login...'
