@@ -8,7 +8,6 @@ import Hero from './components/Hero';
 function App() {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
-  console.log(posts);
 
   useEffect(() => {
 
@@ -30,7 +29,7 @@ function App() {
   return (
     <div className="App">
       <Header user={user} setUser={setUser} />
-      <Hero posts={posts} />
+      <Hero posts={posts} user={user}/>
     </div>
   );
 }
