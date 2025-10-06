@@ -13,6 +13,11 @@ const Post = ({data, id, user}) => {
   const handleComment = async (idComment, e) => {
     e.preventDefault();
 
+    if (!user) {
+      notify({ type: 'error', title: 'Usuário deslogado!', description: 'Logue no sistema antes de enviar seu comentário.', duration: 5000 });
+      return;
+    }
+
     const currentComment = (commentText[idComment] || '').trim();
 
     if (!currentComment) {
