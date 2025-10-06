@@ -48,6 +48,23 @@ const PostModal = ({ openModal, setOpenModal, user }) => {
     });
   }
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+      setNewFile(null);
+      return;
+    }
+
+    if (!file.type || !file.type.startsWith('image/')) {
+      notify({ type: 'error', title: 'Arquivo inválido', description: 'Apenas imagens são permitidas.', duration: 5000 });
+      setNewFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
+    setNewFile(file);
+  };
+
   const newPost = async (e) => {
     e.preventDefault();
 
@@ -58,6 +75,13 @@ const PostModal = ({ openModal, setOpenModal, user }) => {
 
     if (!newFile) {
       notify({ type: 'error', title: 'Arquivo não selecionado!', description: 'Selecione uma imagem antes de publicar.', duration: 5000 });
+      return;
+    }
+
+    if (!newFile.type || !newFile.type.startsWith('image/')) {
+      notify({ type: 'error', title: 'Arquivo inválido', description: 'Apenas imagens serão aceitas para publicação.', duration: 5000 });
+      setNewFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
 
@@ -117,7 +141,8 @@ const PostModal = ({ openModal, setOpenModal, user }) => {
               id="fileInput"
               name="file"
               ref={fileInputRef}
-              onChange={(e) => setNewFile(e.target.files[0])}
+              accept="image/*"
+              onChange={handleFileChange}
             />
             <p className="fileUploadText">
               {newFile ? newFile.name : "Nenhum arquivo escolhido"}
