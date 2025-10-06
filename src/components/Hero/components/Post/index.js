@@ -14,7 +14,12 @@ const Post = ({data, id, user}) => {
     e.preventDefault();
 
     if (!user) {
-      notify({ type: 'error', title: 'Usuário deslogado!', description: 'Logue no sistema antes de enviar seu comentário.', duration: 5000 });
+      notify({
+        type: 'error',
+        title: 'Você não está logado!',
+        description: 'Faça login no sistema antes de enviar um comentário.',
+        duration: 5000
+      });
       return;
     }
 
