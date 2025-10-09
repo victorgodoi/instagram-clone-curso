@@ -11,18 +11,30 @@ function App() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-
-    auth.onAuthStateChanged((item) => {
-      setUser(item.displayName || null)
-    })
-
-    const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      setPosts(snapshot.docs.map((doc) => ({
-        id: doc.id,
-        info: doc.data(),
-      })));
+    const unsubscribeAuth = auth.onAuthStateChanged((item) => {
+      setUser(item ? (item.displayName || item.email || null) : null);
     });
+
+    return () => unsubscribeAuth();
+  }, []);
+
+  useEffect(() => {
+    const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        console.log('snapshot', snapshot);
+        setPosts(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            info: doc.data(),
+          }))
+        );
+      },
+      (error) => {
+        console.error('Firestore onSnapshot error (posts):', error);
+      }
+    );
 
     return () => unsubscribe();
   }, [user]);

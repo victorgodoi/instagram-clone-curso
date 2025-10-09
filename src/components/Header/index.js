@@ -37,6 +37,8 @@ const Header = ({ user, setUser }) => {
     auth.signOut().then(() => {
       setUser(null);
     })
+    setEmail('');
+    setPassword('');
     notify({ type: 'success', title: 'Você saiu!', description: 'Sessão encerrada com sucesso.', duration: 3000 });
   }
 
