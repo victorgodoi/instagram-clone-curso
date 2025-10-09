@@ -79,7 +79,7 @@ const Header = ({ user, setUser }) => {
                 <form onSubmit={(e) => Logar(e)}>
                   <input
                     type='text'
-                    placeholder='Login...'
+                    placeholder='Email...'
                     name='email'
                     onChange={(e) => setEmail(e.target.value)}
                    />
