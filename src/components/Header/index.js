@@ -85,7 +85,7 @@ const Header = ({ user, setUser }) => {
                    />
                   <input
                     type='password'
-                    placeholder='senha...'
+                    placeholder='Senha...'
                     name='password'
                     onChange={(e) => setPassword(e.target.value)}
                   />
