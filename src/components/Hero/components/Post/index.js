@@ -60,7 +60,6 @@ const Post = ({data, id, user}) => {
     return () => unsubscribe();
   }, [id]);
 
-
   return (
     <div className='postCard'>
       <div className='imageCard' style={{ backgroundImage: `url(${data.image})` }} />

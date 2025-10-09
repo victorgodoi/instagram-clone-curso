@@ -26,7 +26,7 @@ function App() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [user]);
 
   return (
     <NotificationProvider>
