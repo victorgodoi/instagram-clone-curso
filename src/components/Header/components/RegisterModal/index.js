@@ -51,15 +51,15 @@ const RegisterModal = ({ openModal, setOpenModal }) => {
         <form onSubmit={(e) => createAccount(e)}>
           <input
             type="text"
-            placeholder="Seu e-mail..."
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="text"
             placeholder="Seu username..."
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
+          />
+          <input
+            type="email"
+            placeholder="Seu e-mail..."
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <input
             type="password"

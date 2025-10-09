@@ -16,14 +16,13 @@ function App() {
     });
 
     return () => unsubscribeAuth();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        console.log('snapshot', snapshot);
         setPosts(
           snapshot.docs.map((doc) => ({
             id: doc.id,
