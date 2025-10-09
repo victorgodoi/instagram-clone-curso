@@ -19,7 +19,7 @@ const Header = ({ user, setUser }) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        setUser(user.displayName || user.email);
+        setUser(user.displayName);
         notify({ type: 'success', title: 'Logado com sucesso!', description: 'Bem-vindo(a)!', duration: 3000 });
       })
       .catch((error) => {

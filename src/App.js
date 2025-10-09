@@ -12,7 +12,7 @@ function App() {
 
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged((item) => {
-      setUser(item ? (item.displayName || item.email || null) : null);
+      setUser(item ? (item.displayName) : null);
     });
 
     return () => unsubscribeAuth();
