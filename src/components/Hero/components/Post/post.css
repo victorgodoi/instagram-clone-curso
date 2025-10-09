@@ -69,7 +69,7 @@
       input[type=submit] {
         background-color: #0095f6;
         color: white;
-        border: 0;
+        border: 1px solid #0095f6;
         height: 24px;
         width: auto;
         padding: 0 12px;
@@ -77,6 +77,11 @@
         border-radius: 10px;
         font-size: 12px;
         align-self: flex-start;
+
+        &:hover {
+          background-color: white;
+          color: #0095f6;
+        }
       }
     }
   }

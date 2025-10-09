@@ -4,7 +4,6 @@ import { db, auth } from './firebase';
 import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import Header from './components/Header';
 import Hero from './components/Hero';
-// import Notification from './components/Notification';
 import { NotificationProvider } from './providers/NotificationProvider';
 
 function App() {
