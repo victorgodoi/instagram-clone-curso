@@ -16,7 +16,7 @@ function App() {
     });
 
     return () => unsubscribeAuth();
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
