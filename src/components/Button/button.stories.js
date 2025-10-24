@@ -29,22 +29,23 @@ export default {
   },
 };
 
-const Template = (args) => <Button {...args} />;
-
-export const Primary = Template.bind({});
-Primary.args = {
-  variant: 'primary',
-  children: 'Botão Primário',
+export const Primary ={
+  args: {
+    variant: 'primary',
+    children: 'Botão Primário',
+  },
 };
 
-export const Secondary = Template.bind({});
-Secondary.args = {
-  variant: 'secondary',
-  children: 'Botão Secundário',
+export const Secondary = {
+  args: {
+    variant: 'secondary',
+    children: 'Botão Secundário',
+  },
 };
 
-export const Link = Template.bind({});
-Link.args = {
-  variant: 'link',
-  children: 'Botão Link',
+export const Link = {
+  args: {
+    variant: 'link',
+    children: 'Botão Link',
+  },
 };
