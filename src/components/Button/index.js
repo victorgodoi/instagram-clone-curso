@@ -2,6 +2,7 @@ import './button.css';
 
 const Button = ({ onClick, children, variant }) => {
 
+  //função para definir as classes CSS com base na variante
   const variantStyles = (variant) => {
     const styles = {
       primary: 'button',
