@@ -96,7 +96,6 @@ const Header = ({ user, setUser }) => {
                 <Button
                   onClick={() => setOpenModalRegister(true)}
                   variant='link'
-                  style={{ marginTop: '10px'}}
                 >
                   Criar Conta!
                 </Button>
