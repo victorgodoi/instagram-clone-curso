@@ -18,20 +18,6 @@ header {
       align-items: center;
       gap: 10px;
 
-      .register {
-        button {
-          font-size: 14px;
-          text-decoration: underline;
-          background-color: transparent;
-          border: none;
-          cursor: pointer;
-
-          &:hover {
-            color: #434242;
-          }
-        }
-      }
-
       input[type=text],
       input[type=password] {
         width: 180px;

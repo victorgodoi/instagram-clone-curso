@@ -93,15 +93,12 @@ const Header = ({ user, setUser }) => {
                     name='action'
                   />
                 </form>
-                <div className='register'>
-                  <button
-                    type="button"
-                    className="link-button"
-                    onClick={() => setOpenModalRegister(true)}
-                  >
-                    Criar Conta!
-                  </button>
-                </div>
+                <Button
+                  onClick={() => setOpenModalRegister(true)}
+                  variant='link'
+                >
+                  Criar Conta!
+                </Button>
               </div>
             </>
           }

@@ -12,9 +12,9 @@ export default {
     variant: {
       description: 'Define o estilo visual do botão.',
       control: { type: 'select' },
-      options: ['primary', 'secondary'],
+      options: ['primary', 'secondary', 'link'],
       table: {
-        type: { summary: '"primary" | "secondary"' },
+        type: { summary: '"primary" | "secondary" | "link"' },
         defaultValue: { summary: '"primary"' },
       },
     },
@@ -41,4 +41,10 @@ export const Secondary = Template.bind({});
 Secondary.args = {
   variant: 'secondary',
   children: 'Botão Secundário',
+};
+
+export const Link = Template.bind({});
+Link.args = {
+  variant: 'link',
+  children: 'Botão Link',
 };
