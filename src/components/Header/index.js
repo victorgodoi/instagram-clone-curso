@@ -5,6 +5,7 @@ import { auth } from '../../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import PostModal from './components/PostModal';
 import { useNotification } from '../../hooks/useNotification'
+import Button from '../Button';
 
 const Header = ({ user, setUser }) => {
   const [openModalRegister, setOpenModalRegister] = useState(false);
@@ -58,20 +59,17 @@ const Header = ({ user, setUser }) => {
           {user ?
             <div className='logadoInfo'>
               <span>Olá <strong>{user}</strong></span>
-              <button
-                type="button"
-                className="link-button"
+              <Button
                 onClick={() => setOpenPostModal(true)}
               >
                 Postar
-              </button>
-              <button
-                type="button"
-                className="buttonLogout"
+              </Button>
+              <Button
                 onClick={(e) => Logout(e)}
+                variant='secondary'
               >
                 Deslogar
-              </button>
+              </Button>
             </div>
           :
             <>
@@ -95,15 +93,12 @@ const Header = ({ user, setUser }) => {
                     name='action'
                   />
                 </form>
-                <div className='register'>
-                  <button
-                    type="button"
-                    className="link-button"
-                    onClick={() => setOpenModalRegister(true)}
-                  >
-                    Criar Conta!
-                  </button>
-                </div>
+                <Button
+                  onClick={() => setOpenModalRegister(true)}
+                  variant='link'
+                >
+                  Criar Conta!
+                </Button>
               </div>
             </>
           }

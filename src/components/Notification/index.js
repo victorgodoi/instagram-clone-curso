@@ -1,17 +1,4 @@
-import './notification.css'
-
-// const Notification = () => {
-//   return (
-//     <div className="notification">
-//       <div className='textNotification'>
-//         <h4>Erro: Ocorreu um erro ao se logar!</h4>
-//         <p>Descrição: Coloque um email e senha válido</p>
-//       </div>
-//     </div>
-//   )
-// }
-
-// export default Notification;
+import './notification.css';
   
 const Icon = ({ type }) => {
   if (type === 'error') return <span className="notif-icon">✖</span>;
