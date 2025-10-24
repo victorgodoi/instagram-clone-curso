@@ -1,11 +1,11 @@
-name: Chromatic
+name: Chromatic Deployment
 
 on:
   push:
     branches:
       - main
-      - 'feat/**'
-      - 'fix/**'
+      - 'feat_**'
+      - 'fix_**'
   pull_request:
     branches:
       - main
@@ -17,10 +17,16 @@ jobs:
       - name: Checkout do repositório
         uses: actions/checkout@v4
 
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       - name: Instalar dependências
-        run: npm install
+        run: npm ci
 
       - name: Rodar Chromatic
-        run: npm run chromatic
-        env:
-          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        uses: chromaui/action@v1
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
