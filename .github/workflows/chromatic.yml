@@ -11,7 +11,7 @@ on:
     branches:
       - main
 
-  jobs:
+jobs:
   # Run interaction and accessibility tests
   interaction-and-accessibility:
     runs-on: ubuntu-latest
@@ -33,30 +33,31 @@ on:
           npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
             "npx http-server storybook-static --port 6006 --silent" \
             "npx wait-on tcp:6006 && yarn test-storybook"
-        # Run visual and composition tests with Chromatic
-        visual-and-composition:
-          runs-on: ubuntu-latest
-          steps:
-            - uses: actions/checkout@v4
-              with:
-                fetch-depth: 0 # Required to retrieve Git history
-            - name: Install dependencies
-              run: yarn
-            - name: Publish to Chromatic
-              uses: chromaui/action@latest
-              with:
-                # Grab this from the Chromatic manage page
-                projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          # Run user flow tests with Cypress
-          # user-flow:
-          #   runs-on: ubuntu-latest
-          #   steps:
-          #     - uses: actions/checkout@v4
-          #       with:
-          #         fetch-depth: 0
-          #     - name: Install dependencies
-          #       run: yarn
-          #     - name: Cypress run
-          #       uses: cypress-io/github-action@v6
-          #       with:
-          #         start: npm run dev
+
+  # Run visual and composition tests with Chromatic
+  visual-and-composition:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required to retrieve Git history
+      - name: Install dependencies
+        run: yarn
+      - name: Publish to Chromatic
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+
+  # Run user flow tests with Cypress
+  # user-flow:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Install dependencies
+  #       run: yarn
+  #     - name: Cypress run
+  #       uses: cypress-io/github-action@v6
+  #       with:
+  #         start: npm run dev
