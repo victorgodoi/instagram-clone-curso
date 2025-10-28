@@ -24,8 +24,8 @@ jobs:
           node-version: 20
       - name: Install dependencies
         run: yarn
-      # - name: Install Playwright
-      #   run: npx playwright install --with-deps
+      - name: Install Playwright
+        run: npx playwright install --with-deps
       - name: Build Storybook
         run: yarn build-storybook --quiet
       - name: Serve Storybook and run tests
@@ -49,7 +49,7 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
 
   # Run user flow tests with Cypress
-  # user-flow:
+  # user-flow:A
   #   runs-on: ubuntu-latest
   #   steps:
   #     - uses: actions/checkout@v4
