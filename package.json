@@ -20,6 +20,7 @@
     "eject": "react-scripts eject",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "test-storybook": "test-storybook",
     "chromatic": "npx chromatic --project-token=chpt_0a7950dc37ff201"
   },
   "eslintConfig": {
@@ -46,6 +47,7 @@
     "@storybook/addon-onboarding": "^9.1.12",
     "@storybook/preset-create-react-app": "^9.1.12",
     "@storybook/react-webpack5": "^9.1.12",
+    "@storybook/test-runner": "^0.24.0",
     "chromatic": "^13.3.2",
     "eslint-plugin-storybook": "^9.1.12",
     "prop-types": "^15.8.1",
