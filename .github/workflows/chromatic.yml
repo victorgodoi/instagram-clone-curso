@@ -1,0 +1,66 @@
+name: Chromatic
+
+on:
+  push:
+    branches:
+      - main
+      - 'feat_*'
+      - 'fix_*'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+jobs:
+  # Run interaction and accessibility tests
+  interaction-and-accessibility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: yarn
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+      - name: Build Storybook
+        run: yarn build-storybook --quiet
+      - name: Serve Storybook and run tests
+        run: |
+          npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+            "npx http-server storybook-static --port 6006 --silent" \
+            "npx wait-on tcp:6006 && yarn test-storybook"
+
+  # Run visual and composition tests with Chromatic
+  visual-and-composition:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required to retrieve Git history
+      - name: Install dependencies
+        run: yarn
+      - name: Run Chromatic
+        run: |
+          npx chromatic \
+            --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} \
+            --exit-once-uploaded \
+            --exit-zero-on-changes=false \
+            --allow-console-errors=false
+
+  # Run user flow tests with Cypress
+  # user-flow:A
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Install dependencies
+  #       run: yarn
+  #     - name: Cypress run
+  #       uses: cypress-io/github-action@v6
+  #       with:
+  #         start: npm run dev
