@@ -21,6 +21,10 @@ services:
       - /app/node_modules
 
     # Variáveis de ambiente para o container
+    # env_file lê o arquivo .env do host e injeta as variáveis no container.
+    # O arquivo .env NÃO é copiado para dentro da imagem — apenas as variáveis são passadas.
+    env_file:
+      - .env
     environment:
       - HOST=0.0.0.0
       - CHOKIDAR_USEPOLLING=true # Necessário no Windows/WSL para o hot reload funcionar
