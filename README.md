@@ -2,6 +2,20 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Running with Docker
+
+Prefer running the project with Docker? See the complete guide in [DOCKER.md](DOCKER.md).
+
+Quick start:
+
+```bash
+docker compose up --build
+```
+
+Then open [http://localhost:3000](http://localhost:3000).
+
+---
+
 ## Available Scripts
 
 In the project directory, you can run:

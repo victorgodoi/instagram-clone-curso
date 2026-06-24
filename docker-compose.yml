@@ -1,0 +1,29 @@
+services:
+  app:
+    # Constrói a imagem a partir do Dockerfile na pasta atual
+    build: .
+
+    # Nome do container criado — facilita identificar nos comandos Docker
+    container_name: instagram-clone
+
+    # Mapeia a porta 3000 do host para a porta 3000 do container
+    # Formato: "porta_do_seu_computador:porta_do_container"
+    ports:
+      - "3000:3000"
+
+    # Sincroniza o código-fonte do host com o container em tempo real.
+    # Assim, editar um arquivo localmente reflete no container sem rebuild.
+    # A linha "/app/node_modules" cria um volume anônimo para proteger o
+    # node_modules instalado no container de ser sobrescrito pelo bind mount acima.
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - /app/node_modules
+
+    # Variáveis de ambiente para o container
+    environment:
+      - HOST=0.0.0.0
+      - CHOKIDAR_USEPOLLING=true # Necessário no Windows/WSL para o hot reload funcionar
+
+    # Reinicia o container automaticamente caso ele pare por erro
+    restart: unless-stopped
