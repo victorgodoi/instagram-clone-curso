@@ -20,6 +20,7 @@ RUN npm ci --legacy-peer-deps
 # É feito depois do install para não invalidar o cache quando o código muda.
 COPY public/ ./public/
 COPY src/ ./src/
+COPY .storybook/ ./.storybook/
 
 # Define a variável de ambiente HOST como 0.0.0.0.
 # Por padrão, o dev server do CRA escuta apenas em localhost, o que impede
@@ -27,8 +28,10 @@ COPY src/ ./src/
 ENV HOST=0.0.0.0
 
 # Informa ao Docker que o container escutará na porta 3000 em tempo de execução.
-# É apenas documentação — não publica a porta automaticamente.
+# A porta 6006 é usada pelo Storybook.
+# EXPOSE é apenas documentação — não publica as portas automaticamente.
 EXPOSE 3000
+EXPOSE 6006
 
 # Comando executado quando o container inicia.
 # Roda o dev server do Create React App.

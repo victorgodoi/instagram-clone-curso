@@ -31,3 +31,29 @@ services:
 
     # Reinicia o container automaticamente caso ele pare por erro
     restart: unless-stopped
+
+  storybook:
+    # Reutiliza o mesmo Dockerfile do app — a imagem já tem todas as dependências
+    build: .
+
+    container_name: instagram-clone-storybook
+
+    # Storybook roda na porta 6006 por padrão
+    ports:
+      - "6006:6006"
+
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./.storybook:/app/.storybook
+      - /app/node_modules
+
+    # Sobrescreve o CMD do Dockerfile para rodar o Storybook em vez do CRA.
+    # --host 0.0.0.0 permite conexões externas ao container.
+    # --no-open impede que o Storybook tente abrir o navegador dentro do container.
+    command: npx storybook dev -p 6006 --host 0.0.0.0 --no-open
+
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+    restart: unless-stopped
